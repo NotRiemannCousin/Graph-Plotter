@@ -1,0 +1,29 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:/SFML-2.5.1(gcc)/include"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerArgs": [
+                "-IC:/SFML-2.5.1(gcc)/include",
+                "-LC:/SFML-2.5.1(gcc)/lib",
+                "-lsfml-graphics",
+                "-lsfml-window",
+                "-lsfml-system",
+                "-lsfml-network",
+                "-lsfml-audio",
+                "-static-libstdc++"
+            ],
+            "intelliSenseMode": "windows-gcc-x86",
+            "compilerPath": "C:\\mingw\\mingw64\\bin\\g++.exe"
+        }
+    ],
+    "version": 4
+}

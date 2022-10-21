@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#pragma once
 
 using namespace sf;
 
@@ -8,12 +9,15 @@ class Axis : public Drawable
     float stroke = 2;
 
 public:
-    Axis() : _X(Vector2f(UINT_MAX, 2)), _Y(Vector2f(2, UINT_MAX))
+    Axis()
     {
         _X.setFillColor(Color::Black);
         _X.setPosition(-INT_MAX / 2, -stroke / 2);
+        _X.setSize(Vector2f(UINT_MAX, stroke));
+
         _Y.setFillColor(Color::Black);
         _Y.setPosition(-stroke / 2, -INT_MAX / 2);
+        _Y.setSize(Vector2f(stroke, UINT_MAX));
     }
 
     void changeStroke(float _stroke)

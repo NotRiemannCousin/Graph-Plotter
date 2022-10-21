@@ -1,12 +1,14 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "grid/Axis.hpp"
+#include "grid/SubLines.hpp"
 
 using namespace sf;
 using std::cin;
 using std::cout;
 using std::string;
 using std::to_string;
+using std::vector;
 
 class Graph
 {
@@ -22,6 +24,9 @@ class Graph
 
     View camera;
     Axis axis;
+    vector<SubLines> grid;
+
+
     Text output;
     Font font;
 
@@ -73,7 +78,6 @@ class Graph
                     factor = camera.getSize().x / window.getSize().x;
 
                     axis.changeStroke(camera.getSize().x / 360);
-                    cout << camera.getSize().x / 360;
                 }
 
                 if (KPshift) // Move X
@@ -97,12 +101,11 @@ class Graph
             break;
             }
         }
-
         window.setView(camera);
     }
+
     void draw()
     {
-
         string out;
 
         out = "KPctrl : " + to_string(KPctrl);
