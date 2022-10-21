@@ -6,7 +6,7 @@ using namespace sf;
 class Axis : public Drawable
 {
     RectangleShape _X, _Y;
-    float stroke = 1;
+    float stroke = 2;
 
 public:
     Axis()

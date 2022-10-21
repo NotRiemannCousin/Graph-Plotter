@@ -1,9 +1,5 @@
-
 #include "Graph.hpp"
 using namespace sf;
-
-
-
 
 int main()
 {

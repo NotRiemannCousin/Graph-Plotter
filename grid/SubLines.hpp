@@ -23,7 +23,7 @@ public:
         orientation = _orientation;
         offset = _offset;
 
-        _line.setFillColor(Color(150, 150, 150)); // White Gray
+        _line.setFillColor(Color(150, 150, 150, 50)); // White Gray
 
         switch (orientation)
         {
@@ -63,7 +63,7 @@ public:
         }
     }
 
-    void changePos(float _offset)
+    void setOffset(float _offset)
     {
         offset = _offset;
 
@@ -88,6 +88,19 @@ public:
         return _line.getSize().x;
     }
 
+    float getOffset() {
+        return offset;
+    }
+    
+    FloatRect getBox()
+    {
+        return _line.getGlobalBounds();
+    }
+    
+    int getOrientation(){
+        return orientation;
+    }
+    
     // Overwrite
 
     void draw(RenderTarget &target, RenderStates states) const

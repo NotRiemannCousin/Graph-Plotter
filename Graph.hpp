@@ -13,7 +13,8 @@ using std::vector;
 class Graph
 {
     int SizeScreenX = 720, SizeScreenY = 720;
-    float factor = 1, offset_size_lines = 0;
+    float factor = 1, offset_size_lines = 80;
+    const float line_n = 18;
     Vector2f MousePos;
     Color backgroundColor = Color::White;
 
@@ -107,6 +108,45 @@ class Graph
             }
         }
         window.setView(camera);
+
+        for (auto &line : grid)
+        {
+            auto box = line.getBox();
+
+            auto view_box = FloatRect(camera.getCenter().x - camera.getSize().x / 2,
+                                      camera.getCenter().y - camera.getSize().y / 2,
+                                      camera.getSize().x,
+                                      camera.getSize().y);
+
+            if (view_box.intersects(box))
+                continue;
+
+            if (line.getOrientation() == SubLines::Vertical){
+                if (box.left + box.width < view_box.left)
+                {
+                    line.setOffset(line.getOffset() + offset_size_lines * line_n / 2);
+                    continue;
+                }
+                else if (box.left > view_box.width + view_box.left)
+                {
+                    line.setOffset(line.getOffset() - offset_size_lines * line_n / 2);
+                    continue;
+                }
+            }
+            
+            if (line.getOrientation() == SubLines::Horizontal){
+                if (box.top + box.height < view_box.top)
+                {
+                    line.setOffset(line.getOffset() + offset_size_lines * line_n / 2);
+                    continue;
+                }
+                else if (box.top > view_box.height + view_box.top)
+                {
+                    line.setOffset(line.getOffset() - offset_size_lines * line_n / 2);
+                    continue;
+                }
+            }
+        }
     }
 
     void draw()
@@ -144,8 +184,8 @@ public:
         output = Text("", font, 30U);
         output.setFillColor(Color::Black);
 
-        int lines_n = factor * 2 * 8;
-        grid.reserve(lines_n);
+        grid.reserve(line_n);
+
         for (int i = -4; i < 5; i++)
         {
             grid.push_back(SubLines(SubLines::Orientation::Horizontal, SizeScreenX / 9 * i));
