@@ -14,7 +14,7 @@ class Graph
 {
     int SizeScreenX = 720, SizeScreenY = 720;
     float factor = 1, offset_size_lines = 80;
-    const float line_n = 18;
+    const float line_n = 30;
     Vector2f MousePos;
     Color backgroundColor = Color::White;
 
@@ -109,19 +109,22 @@ class Graph
         }
         window.setView(camera);
 
+        auto view_box = FloatRect(camera.getCenter().x - camera.getSize().x / 2,
+                                  camera.getCenter().y - camera.getSize().y / 2,
+                                  camera.getSize().x,
+                                  camera.getSize().y);
+
+        // if(view_box.height)
+
         for (auto &line : grid)
         {
             auto box = line.getBox();
 
-            auto view_box = FloatRect(camera.getCenter().x - camera.getSize().x / 2,
-                                      camera.getCenter().y - camera.getSize().y / 2,
-                                      camera.getSize().x,
-                                      camera.getSize().y);
-
             if (view_box.intersects(box))
                 continue;
 
-            if (line.getOrientation() == SubLines::Vertical){
+            if (line.getOrientation() == SubLines::Vertical)
+            {
                 if (box.left + box.width < view_box.left)
                 {
                     line.setOffset(line.getOffset() + offset_size_lines * line_n / 2);
@@ -133,8 +136,9 @@ class Graph
                     continue;
                 }
             }
-            
-            if (line.getOrientation() == SubLines::Horizontal){
+
+            if (line.getOrientation() == SubLines::Horizontal)
+            {
                 if (box.top + box.height < view_box.top)
                 {
                     line.setOffset(line.getOffset() + offset_size_lines * line_n / 2);
@@ -186,15 +190,13 @@ public:
 
         grid.reserve(line_n);
 
-        for (int i = -4; i < 5; i++)
+        for (int i = -7; i < 8; i++) // H
         {
             grid.push_back(SubLines(SubLines::Orientation::Horizontal, SizeScreenX / 9 * i));
-            std::cout << grid.back().getStroke();
         }
-        for (int i = -4; i < 5; i++)
+        for (int i = -7; i < 8; i++) // V
         {
             grid.push_back(SubLines(SubLines::Orientation::Vertical, SizeScreenX / 9 * i));
-            cout << grid.back().getStroke();
         }
     }
 
@@ -202,9 +204,7 @@ public:
     {
         while (window.isOpen())
         {
-
             events();
-
             draw();
         }
     }
