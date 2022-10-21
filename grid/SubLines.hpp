@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 using namespace sf;
 
@@ -22,7 +23,7 @@ public:
         orientation = _orientation;
         offset = _offset;
 
-        _line.setFillColor(Color(82, 82, 82)); // White Gray
+        _line.setFillColor(Color(150, 150, 150)); // White Gray
 
         switch (orientation)
         {
@@ -41,7 +42,7 @@ public:
         }
     }
 
-    voidchangeStroke(float _stroke)
+    void changeStroke(float _stroke)
     {
         stroke = _stroke;
 
@@ -83,7 +84,8 @@ public:
 
     float getStroke()
     {
-        return stroke;
+        // return stroke;
+        return _line.getSize().x;
     }
 
     // Overwrite
@@ -94,4 +96,4 @@ public:
     }
 };
 
-float SubLines::stroke = 2;
+float SubLines::stroke = 1;

@@ -13,7 +13,7 @@ using std::vector;
 class Graph
 {
     int SizeScreenX = 720, SizeScreenY = 720;
-    float factor = 1;
+    float factor = 1, offset_size_lines = 0;
     Vector2f MousePos;
     Color backgroundColor = Color::White;
 
@@ -25,7 +25,6 @@ class Graph
     View camera;
     Axis axis;
     vector<SubLines> grid;
-
 
     Text output;
     Font font;
@@ -77,14 +76,20 @@ class Graph
 
                     factor = camera.getSize().x / window.getSize().x;
 
-                    axis.changeStroke(camera.getSize().x / 360);
+                    float new_stroke = camera.getSize().x / 360;
+                    float new_offset = (int)camera.getSize().x / 10;
+                    axis.changeStroke(new_stroke);
+                    for (auto &line : grid)
+                    {
+                        line.changeStroke(new_stroke);
+                    }
                 }
 
                 if (KPshift) // Move X
                     camera.move(e.mouseWheelScroll.delta * factor * 50, 0);
 
-                if (KPalt)                                                                    // Move Y
-                    camera.move(0, -e.mouseWheelScroll.delta * factor * 50), backgroundColor; // = Color::Blue;
+                if (KPalt) // Move Y
+                    camera.move(0, -e.mouseWheelScroll.delta * factor * 50);
             }
             break;
             case Event::MouseMoved:
@@ -117,6 +122,8 @@ class Graph
         output.setString(out);
 
         window.clear(backgroundColor);
+        for (auto &line : grid)
+            window.draw(line);
         window.draw(axis);
         window.draw(output);
         window.display();
@@ -136,6 +143,19 @@ public:
         font.loadFromFile("C:/Users/Aluno/Downloads/Arialn.ttf");
         output = Text("", font, 30U);
         output.setFillColor(Color::Black);
+
+        int lines_n = factor * 2 * 8;
+        grid.reserve(lines_n);
+        for (int i = -4; i < 5; i++)
+        {
+            grid.push_back(SubLines(SubLines::Orientation::Horizontal, SizeScreenX / 9 * i));
+            std::cout << grid.back().getStroke();
+        }
+        for (int i = -4; i < 5; i++)
+        {
+            grid.push_back(SubLines(SubLines::Orientation::Vertical, SizeScreenX / 9 * i));
+            cout << grid.back().getStroke();
+        }
     }
 
     void Run()
