@@ -21,8 +21,7 @@
                 "-lsfml-audio",
                 "-static-libstdc++"
             ],
-            "intelliSenseMode": "windows-gcc-x86",
-            "compilerPath": "C:\\mingw\\mingw64\\bin\\g++.exe"
+            "intelliSenseMode": "windows-gcc-x86"
         }
     ],
     "version": 4
