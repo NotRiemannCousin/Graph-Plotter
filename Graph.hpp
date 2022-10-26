@@ -1,7 +1,12 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <cmath>
 #include "grid/Axis.hpp"
 #include "grid/SubLines.hpp"
+
+#define JUMP_SIZE 80
+#define SizeScreenX 720
+#define SizeScreenY 720
 
 using namespace sf;
 using std::cin;
@@ -10,11 +15,16 @@ using std::string;
 using std::to_string;
 using std::vector;
 
+int intlog(double base, double x)
+{
+    return (int)(log(x) / log(base));
+}
+
 class Graph
 {
-    int SizeScreenX = 720, SizeScreenY = 720;
-    float factor = 1, offset_size_lines = 80;
+    float factor = 1, offset_size_lines = JUMP_SIZE;
     const float line_n = 30;
+    int current_jump = 1;
     Vector2f MousePos;
     Color backgroundColor = Color::White;
 
@@ -25,6 +35,7 @@ class Graph
 
     View camera;
     Axis axis;
+    FloatRect view_box;
     vector<SubLines> grid;
 
     Text output;
@@ -81,9 +92,65 @@ class Graph
                     float new_offset = (int)camera.getSize().x / 10;
                     axis.changeStroke(new_stroke);
                     for (auto &line : grid)
-                    {
                         line.changeStroke(new_stroke);
+
+                    int new_jump = intlog(5, factor) + 1;
+
+                    cout << powl(5, new_jump) << " = " << new_jump << "\n";
+
+                    if (current_jump == new_jump)
+                        break;
+
+                    current_jump = new_jump;
+                    offset_size_lines = JUMP_SIZE * current_jump;
+
+                    view_box = FloatRect(camera.getCenter().x - camera.getSize().x / 2,
+                                         camera.getCenter().y - camera.getSize().y / 2,
+                                         camera.getSize().x,
+                                         camera.getSize().y);
+
+                    grid.clear();
+                    grid.reserve(line_n);
+                    int scale_log = powl(5, new_jump);
+                    for (int i = -7; i < 8; i++) // H
+                    {
+                        grid.push_back(SubLines(SubLines::Orientation::Horizontal, +int(view_box.top / offset_size_lines) * offset_size_lines + scale_log * offset_size_lines * i));
                     }
+                    for (int i = -7; i < 8; i++) // V
+                    {
+                        grid.push_back(SubLines(SubLines::Orientation::Vertical, +int(view_box.left / offset_size_lines) * offset_size_lines + scale_log * offset_size_lines * i));
+                    }
+
+                    /*for (int i = 0; i < 15; i++) // H
+                    {
+                        grid[i].setOffset(i);
+                    }
+                    for (int i = 15; i < 30; i++) // V
+                    {
+                        grid[i].setOffset(i);
+                    }
+// break;
+                    for (auto &line : grid)
+                    {
+                        auto box = line.getBox();
+
+                        line.setOffset(0);
+
+                        if (view_box.intersects(box))
+                            continue;
+
+                        if (line.getOrientation() == SubLines::Vertical)
+                        {
+                            line.setOffset(int(view_box.left) + offset_size_lines * line.getOffset());
+                            continue;
+                        }
+
+                        if (line.getOrientation() == SubLines::Horizontal)
+                        {
+                            line.setOffset(int(view_box.top) + offset_size_lines * line_n * line.getOffset());
+                            continue;
+                        }
+                    }*/
                 }
 
                 if (KPshift) // Move X
@@ -109,10 +176,10 @@ class Graph
         }
         window.setView(camera);
 
-        auto view_box = FloatRect(camera.getCenter().x - camera.getSize().x / 2,
-                                  camera.getCenter().y - camera.getSize().y / 2,
-                                  camera.getSize().x,
-                                  camera.getSize().y);
+        view_box = FloatRect(camera.getCenter().x - camera.getSize().x / 2,
+                             camera.getCenter().y - camera.getSize().y / 2,
+                             camera.getSize().x,
+                             camera.getSize().y);
 
         // if(view_box.height)
 
@@ -181,10 +248,10 @@ public:
 
     void init()
     {
-        icon.loadFromFile("C:/Users/Aluno/Documents/Marcelo/C++/SFML C++/SFML projetos/graph/res/img/icon.png");
+        icon.loadFromFile("C:/Users/Aluno/Documents/alguem/SFML/Graph Plotter/Graph-Plotter/res/img/icon.png");
         window.setIcon(32, 32, icon.getPixelsPtr());
 
-        font.loadFromFile("C:/Users/Aluno/Downloads/Arialn.ttf");
+        font.loadFromFile("C:/Users/Aluno/Documents/alguem/SFML/Graph Plotter/Graph-Plotter/res/fonts/Roboto-Black.ttf");
         output = Text("", font, 30U);
         output.setFillColor(Color::Black);
 
@@ -204,6 +271,10 @@ public:
     {
         while (window.isOpen())
         {
+            view_box = FloatRect(camera.getCenter().x - camera.getSize().x / 2,
+                                 camera.getCenter().y - camera.getSize().y / 2,
+                                 camera.getSize().x,
+                                 camera.getSize().y);
             events();
             draw();
         }
