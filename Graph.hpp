@@ -184,7 +184,7 @@ public:
         icon.loadFromFile("C:/Users/Aluno/Documents/Marcelo/C++/SFML C++/SFML projetos/graph/res/img/icon.png");
         window.setIcon(32, 32, icon.getPixelsPtr());
 
-        font.loadFromFile("C:/Users/Aluno/Downloads/Arialn.ttf");
+        font.loadFromFile("C:/Users/Aluno/Documents/Marcelo/C++/SFML C++/SFML projetos/graph/res/fonts/arial.ttf");
         output = Text("", font, 30U);
         output.setFillColor(Color::Black);
 
