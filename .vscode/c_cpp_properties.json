@@ -4,7 +4,7 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:/SFML-2.5.1(gcc)/include"
+                "C:/SFML-2.5.1-gcc/include"
             ],
             "defines": [
                 "_DEBUG",
@@ -12,8 +12,8 @@
                 "_UNICODE"
             ],
             "compilerArgs": [
-                "-IC:/SFML-2.5.1(gcc)/include",
-                "-LC:/SFML-2.5.1(gcc)/lib",
+                "'-IC:/SFML-2.5.1-gcc/include'",
+                "'-LC:/SFML-2.5.1-gcc/lib'",
                 "-lsfml-graphics",
                 "-lsfml-window",
                 "-lsfml-system",
